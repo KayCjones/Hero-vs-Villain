@@ -10,11 +10,19 @@ from .serializer import SuperSerializer
 
 # Create your views here.
 
-@api_view(['GET'])
+@api_view(['GET', 'POST'])
 def supers_list (request):
 
-    supers = Super.objects.all()
-
-    serializer = SuperSerializer(supers, many=True)
-
-    return Response(serializer.data)
+    if request.method == 'GET':
+        supers = Super.objects.all()
+        serializer = SuperSerializer(supers, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+        
+    elif request.method == 'POST':
+        serializer = SuperSerializer(data=request.data, status=201)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        else:
+            return Response(serializer.errors, status=400)
+        
