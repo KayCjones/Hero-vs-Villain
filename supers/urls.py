@@ -1,5 +1,7 @@
+from django.urls import path
+from . import views
 
-
-from importlib.resources import path
-
+urlpatterns = [
+    path('', views.supers_list)
+]
 

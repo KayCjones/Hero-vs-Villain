@@ -7,8 +7,9 @@ from super_types.models import SuperType
 
 
 # Create your views here.
+
 @api_view(['GET'])
 def supers_list (request):
-    # supers = Super.objects.all()
-    # return 
-    pass
+
+
+    return Response('ok')
