@@ -4,6 +4,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .models import Super
 from super_types.models import SuperType
+from .serializer import SuperSerializer
+
 
 
 # Create your views here.
@@ -11,5 +13,8 @@ from super_types.models import SuperType
 @api_view(['GET'])
 def supers_list (request):
 
+    supers = Super.objects.all()
 
-    return Response('ok')
+    serializer = SuperSerializer(supers, many=True)
+
+    return Response(serializer.data)
