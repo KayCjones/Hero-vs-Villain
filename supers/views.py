@@ -26,11 +26,17 @@ def supers_list (request):
         else:
             return Response(serializer.errors, status=400)
         
-@api_view(['GET'])
+@api_view(['GET', 'PUT', 'DELETE'])
 def supers_detail(request, pk):
-    try:
-        super = Super.objects.get(pk=pk)
-        serializer = SuperSerializer(super)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except Super.DoesNotExist:
-        return Response(status=status.HTTP_404_NOT_FOUND)
+        super = get_object_or_404(Super, pk=pk)
+        if request.method == 'GET':
+            serializer = SuperSerializer(super)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'PUT':
+            serializer = SuperSerializer(super, data=request.data)
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        elif request.method == 'DELETE':
+            super.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
