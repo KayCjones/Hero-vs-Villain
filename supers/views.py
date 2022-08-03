@@ -26,3 +26,11 @@ def supers_list (request):
         else:
             return Response(serializer.errors, status=400)
         
+@api_view(['GET'])
+def supers_detail(request, pk):
+    try:
+        super = Super.objects.get(pk=pk)
+        serializer = SuperSerializer(super)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    except Super.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
